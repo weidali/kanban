@@ -33,3 +33,5 @@ IEx.configure(
     |> IO.ANSI.format()
     |> IO.chardata_to_string()
 )
+
+alias Kanban.Data.{Project, Task, User}

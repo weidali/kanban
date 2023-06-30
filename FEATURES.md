@@ -139,4 +139,21 @@ iex|💧|14 ▶ DynamicSupervisor.which_children Kanban.TaskManager
 iex|💧|15 ▶ TaskFSM.state {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
 # "idle"
 
+iex|💧|16 ▶ Kanban.TaskManager.start_task "Task2", 3, "Pr1"               
+#PID<0.225.0>
+iex|💧|17 ▶ Kanban.TaskManager.start_task "Task3", 3, "Pr1"
+#PID<0.226.0>
+iex|💧|18 ▶ Kanban.TaskManager.start_task "Task4", 3, "Pr1"
+#PID<0.227.0>
+iex|💧|19 ▶ Kanban.TaskManager.start_task "Task5", 3, "Pr1"
+#PID<0.228.0>
+iex|💧|20 ▶ DynamicSupervisor.which_children Kanban.TaskManager           
+# [
+#   {:undefined, #PID<0.222.0>, :worker, [Kanban.TaskFSM]},
+#   {:undefined, #PID<0.225.0>, :worker, [Kanban.TaskFSM]},
+#   {:undefined, #PID<0.226.0>, :worker, [Kanban.TaskFSM]},
+#   {:undefined, #PID<0.227.0>, :worker, [Kanban.TaskFSM]},
+#   {:undefined, #PID<0.228.0>, :worker, [Kanban.TaskFSM]}
+# ]
+
 ```

@@ -7,6 +7,8 @@ defmodule Kanban.TaskFSM do
 
   use GenServer
 
+  require Logger
+
   def start_link(task: %Task{state: "idle", title: title} = task)
       when not is_nil(title) do
     GenServer.start_link(__MODULE__, task, name: __MODULE__)
@@ -48,7 +50,8 @@ defmodule Kanban.TaskFSM do
   @impl GenServer
   def handle_cast({:transition, transition}, %Task{state: state} = task) do
     # IO.inspect({transition, _from, state, task}, label: "CALL")
-    {:reply, {:error, {:not_allowed, transition, state}}, task}
+    Logger.warn(inspect({:error, {:not_allowed, transition, state}}))
+    {:noreply, task}
   end
 
   @impl GenServer

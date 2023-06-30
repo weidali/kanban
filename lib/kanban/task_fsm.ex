@@ -15,15 +15,15 @@ defmodule Kanban.TaskFSM do
     # GenServer.start_link(__MODULE__, task, name: {:via, Registry, {Kanban.TaskRegistry, title}})
   end
 
-  def start(pid \\__MODULE__) do
+  def start(pid) do
     GenServer.cast(pid, {:transition, :start})
   end
 
-  def finish(pid \\__MODULE__) do
+  def finish(pid) do
     GenServer.cast(pid, {:transition, :finish})
   end
 
-  def state(pid \\__MODULE__) do
+  def state(pid) do
     GenServer.call(pid, :state)
   end
 

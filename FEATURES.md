@@ -55,3 +55,19 @@ F.finish
 #=> :ok
 ```
 
+```zsh
+iex|💧|1 ▶  {:ok, pid} = TaskFSM.start_link task: Task.create("Task1", 3, "Pr1")
+#=> {:ok, #PID<0.198.0>}
+Process.alive? pid
+#=> true
+iex|💧|3 ▶ TaskFSM.state pid
+#=> "idle"
+iex|💧|4 ▶ TaskFSM.start pid
+#=> :ok
+iex|💧|5 ▶ Process.alive? pid
+#=> true
+iex|💧|7 ▶ TaskFSM.finish pid
+#=> :ok
+iex|💧|8 ▶ Process.alive? pid
+#=> false
+```

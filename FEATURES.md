@@ -223,6 +223,4 @@ iex|💧|11 ▶ DynamicSupervisor.which_children(TaskManager) |> Enum.count()
 iex|💧|12 ▶ State.state()["Task_99"]
 # "done"
 
-
-
 ```

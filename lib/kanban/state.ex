@@ -19,12 +19,19 @@ defmodule Kanban.State do
   def put(name \\ __MODULE__, k, v),
     do: GenServer.cast(name, {:put, k, v})
 
+  def del(name \\ __MODULE__, k),
+    do: GenServer.cast(name, {:del, k})
+
   def state(name \\ __MODULE__),
     do: GenServer.call(name, :state)
 
   @impl GenServer
   def handle_cast({:put, k, v}, state),
     do: {:noreply, Map.put(state, k, v)}
+
+  @impl GenServer
+  def handle_cast({:del, k}, state),
+    do: {:noreply, Map.delete(state, k)}
 
   @impl GenServer
   def handle_call({:get, k}, _from, state),

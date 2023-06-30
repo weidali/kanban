@@ -27,6 +27,11 @@ defmodule Kanban.TaskFSM do
   end
 
   @impl GenServer
+  def terminate(:normal, task) do
+    Kanban.State.del(task.title)
+  end
+
+  @impl GenServer
   def init(state), do: {:ok, state}
 
   # :idle, :doing, :done

@@ -37,12 +37,14 @@ defmodule Kanban.TaskFSM do
     #   :error -> task
     # end
     # new_task = {:noreply, new_task}
+    Kanban.State.put(task.title, "doing")
     {:noreply, %Task{task | state: "doing"}}
   end
 
   @impl GenServer
   def handle_cast({:transition, :finish}, %Task{state: "doing"} = task) do
     # Save to external storage or doing something
+    Kanban.State.put(task.title, "done")
     {:stop, :normal, %Task{task | state: "done"}}
   end
 

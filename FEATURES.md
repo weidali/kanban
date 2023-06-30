@@ -157,3 +157,41 @@ iex|💧|20 ▶ DynamicSupervisor.which_children Kanban.TaskManager
 # ]
 
 ```
+
+Get quick access to the status/state of any Task by its name `state.ex`:
+```zsh
+iex|💧|1 ▶ Kanban.TaskManager.start_task "Task1", 3, "Pr1"
+#PID<0.202.0>
+iex|💧|2 ▶ Kanban.TaskManager.start_task "Task2", 3, "Pr1"
+#PID<0.203.0>
+iex|💧|3 ▶ Kanban.TaskManager.start_task "Task3", 3, "Pr1"
+#PID<0.204.0>
+iex|💧|4 ▶ Kanban.TaskManager.start_task "Task4", 3, "Pr1"
+#PID<0.205.0>
+iex|💧|5 ▶ Kanban.TaskManager.start_task "Task5", 3, "Pr1"
+#PID<0.206.0>
+iex|💧|6 ▶ Kanban.State.state
+# %{
+#   "Task1" => "idle",
+#   "Task2" => "idle",
+#   "Task3" => "idle",
+#   "Task4" => "idle",
+#   "Task5" => "idle"
+# }
+iex|💧|7 ▶ TaskFSM.start {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+# :ok
+iex|💧|8 ▶ TaskFSM.start {:via, Registry, {Kanban.TaskRegistry, "Task3"}}
+# :ok
+iex|💧|9 ▶ TaskFSM.finish {:via, Registry, {Kanban.TaskRegistry, "Task3"}}
+# :ok
+iex|💧|10 ▶ Kanban.State.state                                             
+# %{
+#   "Task1" => "doing",
+#   "Task2" => "idle",
+#   "Task3" => "done",
+#   "Task4" => "idle",
+#   "Task5" => "idle"
+# }
+
+
+```

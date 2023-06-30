@@ -9,6 +9,7 @@ defmodule Kanban.Application do
   def start(_type, _args) do
     children = [
       {Registry, keys: :unique, name: Kanban.TaskRegistry},
+      Kanban.State,
       Kanban.TaskManager
     ]
 

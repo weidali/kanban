@@ -11,8 +11,7 @@ defmodule Kanban.TaskFSM do
 
   def start_link(task: %Task{state: "idle", title: title} = task)
       when not is_nil(title) do
-    GenServer.start_link(__MODULE__, task, name: __MODULE__)
-    # GenServer.start_link(__MODULE__, task, name: {:via, Registry, {Kanban.TaskRegistry, title}})
+    GenServer.start_link(__MODULE__, task, name: {:via, Registry, {Kanban.TaskRegistry, title}})
   end
 
   def start(pid) do

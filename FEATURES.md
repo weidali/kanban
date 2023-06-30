@@ -3,7 +3,7 @@
 
 Task state machine description `task_fsm.ex` :
 ```zsh
-{:ok, pid} = Kanban.TaskFSM.start_link %Task{state: :idle} 
+iex|💧|1 ▶ {:ok, pid} = Kanban.TaskFSM.start_link %Task{state: :idle} 
 #=> {:ok, #PID<0.198.0>}
 
 Process.alive? pid                                      
@@ -70,4 +70,30 @@ iex|💧|7 ▶ TaskFSM.finish pid
 #=> :ok
 iex|💧|8 ▶ Process.alive? pid
 #=> false
+```
+
+Use name instead pid `Supervision`:
+```zsh
+iex|💧|1 ▶ {:ok, pid} = {:ok, pid} = TaskFSM.start_link task: Task.create("Task1", 3, "Pr1") 
+#=> {:ok, #PID<0.198.0>}
+iex|💧|2 ▶ TaskFSM.state {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+#=> :
+iex|💧|3 ▶ TaskFSM.start {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+#=>:ok
+iex|💧|4 ▶ TaskFSM.state {:via, Registry, {Kanban.TaskRegistry, "Task1"}} 
+#=> "doing"
+iex|💧|5 ▶ Process.alive? pid 
+#=> true
+iex|💧|6 ▶ TaskFSM.finish {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+#=> :ok
+iex|💧|7 ▶ Process.alive? pid                                             
+#=> false
+
+iex|💧|8 ▶ pid
+#=> #PID<0.218.0>
+iex|💧|9 ▶ Process.exit pid, :kill
+#=> true
+iex|💧|10 ▶ Process.alive? pid                                             
+#=> false
+
 ```

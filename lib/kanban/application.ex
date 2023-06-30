@@ -8,7 +8,7 @@ defmodule Kanban.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Kanban.Worker.start_link(arg)
+      {Registry, keys: :unique, name: Kanban.TaskRegistry},
       # {Kanban.Worker, arg}
     ]
 

@@ -97,3 +97,46 @@ iex|💧|10 ▶ Process.alive? pid
 #=> false
 
 ```
+
+DynamicSuoervisor `aplication.ex`:
+```zsh
+iex|💧|1 ▶ Process.whereis Kanban.TaskManager
+#PID<0.204.0>
+iex|💧|2 ▶ Process.whereis Kanban.TaskRegistry
+#PID<0.202.0>
+
+iex|💧|3 ▶ DynamicSupervisor.which_children Kanban.TaskRegistry
+# [
+#   {Kanban.TaskRegistry.PIDPartition0, #PID<0.202.0>, :worker,
+#    [Registry.Partition]}
+# ]
+iex|💧|4 ▶ DynamicSupervisor.which_children Kanban.TaskManager 
+# []
+
+iex|💧|4 ▶ Kanban.TaskManager.start_task "Task1", 2, "Pr1"
+#PID<0.214.0>
+iex|💧|5 ▶ DynamicSupervisor.which_children Kanban.TaskManager
+# [{:undefined, #PID<0.214.0>, :worker, [Kanban.TaskFSM]}]
+iex|💧|6 ▶ pid = v(4)
+#PID<0.214.0>
+iex|💧|7 ▶ Process.exit pid, :kill
+# true
+iex|💧|8 ▶ DynamicSupervisor.which_children Kanban.TaskManager
+# [{:undefined, #PID<0.218.0>, :worker, [Kanban.TaskFSM]}]
+iex|💧|9 ▶ TaskFSM.start {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+# :ok
+iex|💧|10 ▶ TaskFSM.state {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+# "doing"
+iex|💧|11 ▶ [{_, pid, _, _}] = v(8)
+# [{:undefined, #PID<0.218.0>, :worker, [Kanban.TaskFSM]}]
+iex|💧|12 ▶ pid
+#PID<0.218.0>
+
+iex|💧|13 ▶ Process.exit pid, :kill                                       
+# true
+iex|💧|14 ▶ DynamicSupervisor.which_children Kanban.TaskManager           
+# [{:undefined, #PID<0.222.0>, :worker, [Kanban.TaskFSM]}]
+iex|💧|15 ▶ TaskFSM.state {:via, Registry, {Kanban.TaskRegistry, "Task1"}}
+# "idle"
+
+```

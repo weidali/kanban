@@ -35,4 +35,4 @@ IEx.configure(
 )
 
 alias Kanban.Data.{Project, Task, User}
-alias Kanban.{TaskFSM}
+alias Kanban.{TaskFSM, TaskManager}

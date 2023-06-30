@@ -53,13 +53,5 @@ F.state
 
 F.finish
 #=> :ok
-Process.alive? self()
-#=> false
-GenServer.call(pid, :state)                
-#=> ** (exit) exited in: GenServer.call(#PID<0.210.0>, :state, 5000)
-    ** (EXIT) no process: the process is not alive or there's no process currently associated with the given name, possibly because its application isn't started
-    (elixir 1.15.0) lib/gen_server.ex:1074: GenServer.call/3
-    iex:10: (file)
-
 ```
 

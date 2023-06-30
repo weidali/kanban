@@ -197,7 +197,7 @@ iex|💧|10 ▶ Kanban.State.state
 
 Main supervisor `main.ex`:
 ```zsh
-iex|💧|1 ▶ (1..1_0000) |> Enum.map(&"Task_#{&1}") |> Enum.map(&TaskManager.start_task &1, 3, "Pr1") 
+iex|💧|1 ▶ (1..1_00000) |> Enum.map(&"Task_#{&1}") |> Enum.map(&TaskManager.start_task &1, 3, "Pr1") 
 
 iex|💧|2 ▶  TaskManager |> DynamicSupervisor.which_children() |> Enum.map(fn {_, pid, :worker, [TaskFSM]} -> pid end) |> Enum.map(&TaskFSM.state/1)
 
@@ -223,4 +223,18 @@ iex|💧|11 ▶ DynamicSupervisor.which_children(TaskManager) |> Enum.count()
 iex|💧|12 ▶ State.state()["Task_99"]
 # "done"
 
+```
+
+Application `kanban.ex`:
+```zsh
+iex|💧|1 ▶ (1..1_00000) |> Enum.map(&"Task_#{&1}") |> Enum.map(&TaskManager.start_task &1, 3, "Pr1") 
+
+iex|💧|3 ▶ Kanban.start_task("Task_999")
+:ok
+iex|💧|4 ▶ Kanban.query_task("Task_999")
+"doing"
+iex|💧|5 ▶ Kanban.finish_task("Task_999")
+:ok
+iex|💧|6 ▶ DynamicSupervisor.which_children(TaskManager) |> Enum.count()
+99999
 ```

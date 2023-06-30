@@ -5,7 +5,7 @@ defmodule Kanban.TaskFSM do
 
   alias Kanban.Data.Task
 
-  use GenServer
+  use GenServer, restart: :transient
 
   require Logger
 

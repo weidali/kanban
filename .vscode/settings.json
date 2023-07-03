@@ -1,5 +1,6 @@
 {
   "window.zoomLevel": -0.5,
+  "editor.formatOnSave": true,
   "workbench.colorCustomizations": {
     "activityBar.activeBorder": "#392f3c",
     "activityBarBadge.background": "#392f3c",

@@ -1,4 +1,4 @@
-defmodule MultiDict do
+defmodule Learn.Todo.MultiDict do
   def new(), do: %{}
 
   def add(dict, key, value) do

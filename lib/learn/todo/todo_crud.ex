@@ -28,4 +28,9 @@ defmodule TodoList do
         %TodoList{todo_list | entries: new_entries}
     end
   end
+
+  def due_today(todo_list) do
+    today = Date.utc_today()
+    entries(todo_list, today)
+  end
 end

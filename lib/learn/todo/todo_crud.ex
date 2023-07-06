@@ -17,6 +17,10 @@ defmodule TodoList do
     |> Enum.map(fn {_, entry} -> entry end)
   end
 
+  def update_entry(todo_list, %{} = new_entry) do
+    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
+  end
+
   def update_entry(todo_list, entry_id, updater_fun) do
     case Map.fetch(todo_list.entries, entry_id) do
       :error ->

@@ -34,6 +34,16 @@ defmodule TodoList do
     end
   end
 
+  def delete_entry(todo_list, entry_id) do
+    case Map.fetch(todo_list.entries, entry_id) do
+      :error ->
+        todo_list
+
+      {:ok, old_entry} ->
+        %TodoList{todo_list | entries: Map.delete(todo_list.entries, entry_id)}
+    end
+  end
+
   def due_today(todo_list) do
     today = Date.utc_today()
     entries(todo_list, today)

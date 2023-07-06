@@ -8,4 +8,11 @@ defmodule Fraction do
   def value(fraction) do
     fraction.a / fraction.b
   end
+
+  def add(%Fraction{a: a1, b: b1}, %Fraction{a: a2, b: b2}) do
+    new(
+      a1 * b2 + a2 * b1,
+      b2 * b1
+    )
+  end
 end

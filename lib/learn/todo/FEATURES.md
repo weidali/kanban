@@ -13,3 +13,9 @@ Protocols:
 String.Chars.to_string(TodoList.new())
 IO.puts(TodoList.new())
 ```
+
+```iex
+entries = [%{date: ~D[2018-12-19], title: "Dentist"}, %{date: ~D[2018-12-20], title: "Shopping"}, %{date: ~D[2018-12-19], title: "Movies"}]
+
+for entry <- entries, into: TodoList.new(), do: entry %TodoList{...}
+```

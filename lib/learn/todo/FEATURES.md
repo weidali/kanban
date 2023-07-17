@@ -19,3 +19,13 @@ entries = [%{date: ~D[2018-12-19], title: "Dentist"}, %{date: ~D[2018-12-20], ti
 
 for entry <- entries, into: TodoList.new(), do: entry %TodoList{...}
 ```
+
+Server's processes `database_server.ex`:
+```iex
+server_pid = DatabaseServer.start()
+DatabaseServer.run_async(server_pid, "query 1")
+DatabaseServer.get_result()
+
+# create processes pull, 100
+pool = Enum.map(1..100, fn _ -> DatabaseServer.start() end)
+```

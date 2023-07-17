@@ -16,6 +16,14 @@ defmodule TodoServer do
     send(todo_server, {:add_entry, new_entry})
   end
 
+  def update_entry(todo_server, entry) do
+    send(todo_server, {:update_entry, entry})
+  end
+
+  def delete_entry(todo_server, entry) do
+    send(todo_server, {:delete_entry, entry})
+  end
+
   def entries(todo_server, date) do
     send(todo_server, {:entries, self(), date})
 
@@ -24,6 +32,18 @@ defmodule TodoServer do
     after
       5000 -> {:error, :timeout}
     end
+  end
+
+  defp process_message(todo_list, {:add_entry, new_entry}) do
+    TodoList.add_entry(todo_list, new_entry)
+  end
+
+  defp process_message(todo_list, {:update_entry, entry}) do
+    TodoList.update_entry(todo_list, entry)
+  end
+
+  defp process_message(todo_list, {:delete_entry, entry}) do
+    TodoList.delete_entry(todo_list, entry)
   end
 
   defp process_message(todo_list, {:add_entry, new_entry}) do
@@ -39,5 +59,53 @@ defmodule TodoServer do
 end
 
 defmodule TodoList do
-  ...
+  defstruct auto_id: 1, entries: %{}
+
+  def new(), do: %TodoList{}
+
+  def add_entry(todo_list, entry) do
+    entry = Map.put(entry, :id, todo_list.auto_id)
+
+    new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
+
+    %TodoList{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
+  end
+
+  def entries(todo_list, date) do
+    todo_list.entries
+    |> Stream.filter(fn {_, entry} -> entry.date == date end)
+    |> Enum.map(fn {_, entry} -> entry end)
+  end
+
+  def update_entry(todo_list, %{} = new_entry) do
+    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
+  end
+
+  def update_entry(todo_list, entry_id, updater_fun) do
+    case Map.fetch(todo_list.entries, entry_id) do
+      :error ->
+        todo_list
+
+      {:ok, old_entry} ->
+        old_entry_id = old_entry.id
+        new_entry = %{id: ^old_entry_id} = updater_fun.(old_entry)
+        new_entries = Map.put(todo_list.entries, new_entry.id, new_entry)
+        %TodoList{todo_list | entries: new_entries}
+    end
+  end
+
+  def delete_entry(todo_list, entry_id) do
+    case Map.fetch(todo_list.entries, entry_id) do
+      :error ->
+        todo_list
+
+      {:ok, old_entry} ->
+        %TodoList{todo_list | entries: Map.delete(todo_list.entries, entry_id)}
+    end
+  end
+
+  def due_today(todo_list) do
+    today = Date.utc_today()
+    entries(todo_list, today)
+  end
 end

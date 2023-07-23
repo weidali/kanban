@@ -14,7 +14,13 @@ defmodule KeyValueStore do
   end
 
   def init(_) do
+    :timer.send_interval(5000, :cleanup)
     {:ok, %{}}
+  end
+
+  def handle_info(:cleanup, state) do
+    IO.puts("performing cleanup...")
+    {:noreply, state}
   end
 
   def handle_cast({:put, key, value}, state) do
